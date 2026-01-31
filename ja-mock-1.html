@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JKSSB JA - Strictly Syllabus Mock Set 5</title>
+    <style>
+        :root { --primary: #0f172a; --accent: #3b82f6; --bg: #f8fafc; }
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background: var(--bg); color: #1e293b; margin: 0; padding: 15px; }
+        .container { max-width: 800px; margin: 20px auto; background: white; padding: 35px; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f1f5f9; margin-bottom: 25px; padding-bottom: 15px; }
+        .timer { font-size: 1.6rem; font-weight: 800; color: #ef4444; font-family: 'Courier New', Courier, monospace; }
+        .badge { background: var(--primary); color: white; padding: 5px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+        .q-info { font-size: 0.85rem; color: #64748b; margin-top: 5px; }
+        .q-text { font-size: 1.2rem; font-weight: 600; margin: 25px 0; line-height: 1.6; color: #0f172a; }
+        .options-grid { display: grid; gap: 12px; }
+        .option { padding: 16px; border: 2px solid #e2e8f0; border-radius: 10px; cursor: pointer; transition: all 0.2s; background: #fff; font-size: 1rem; color: #475569; position: relative; display: flex; align-items: center; }
+        .option:hover { border-color: var(--accent); background: #f8fafc; }
+        .option.selected { border-color: var(--accent); background: #eff6ff; color: var(--accent); font-weight: 600; }
+        .footer { display: flex; justify-content: space-between; margin-top: 40px; padding-top: 25px; border-top: 2px solid #f1f5f9; }
+        button { padding: 12px 25px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; transition: 0.2s; font-size: 0.95rem; }
+        .btn-next { background: var(--accent); color: white; }
+        .btn-prev { background: #f1f5f9; color: #475569; }
+        #results { display: none; text-align: center; }
+        .progress-container { width: 100%; height: 8px; background: #f1f5f9; border-radius: 4px; margin-bottom: 25px; }
+        .progress-bar { height: 100%; background: var(--accent); width: 0%; border-radius: 4px; transition: width 0.3s ease; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="quiz-box">
+    <div class="header">
+        <div>
+            <span class="badge" id="unit-label">Unit I: English</span>
+            <div class="q-info">Set 5 | Question <span id="q-idx">1</span> of 80</div>
+        </div>
+        <div class="timer" id="timer">80:00</div>
+    </div>
+
+    <div class="progress-container"><div class="progress-bar" id="p-bar"></div></div>
+
+    <div id="q-container">
+        <div class="q-text" id="q-display">Loading...</div>
+        <div class="options-grid" id="opt-display"></div>
+    </div>
+
+    <div class="footer">
+        <button class="btn-prev" id="prev-btn" onclick="nav(-1)">Previous</button>
+        <button class="btn-next" id="next-btn" onclick="nav(1)">Next / Submit</button>
+    </div>
+</div>
+
+<div class="container" id="results">
+    <h1 style="color: var(--primary); font-size: 2.2rem; margin-bottom: 10px;">Mock Completed</h1>
+    <p style="color: #64748b;">Performance Analysis - Strict Syllabus Set 5</p>
+    <div style="font-size: 5rem; font-weight: 900; color: var(--accent); margin: 30px 0;" id="score-val">0/80</div>
+    <div id="breakdown" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: left; max-width: 500px; margin: 0 auto 40px auto; font-weight: 600; line-height: 1.8;"></div>
+    <button onclick="location.reload()" class="btn-next" style="padding: 15px 50px; font-size: 1.1rem;">Restart Test</button>
+</div>
+
+<script>
+const data = [
+    // UNIT I: GENERAL ENGLISH (20 Qs)
+    { q: "Identify the type of underlined clause: 'I did not know **that he had already left**.'", o: ["Adjective Clause", "Adverb Clause", "Noun Clause", "Relative Clause"], c: 2, u: "Unit I: English" },
+    { q: "Paragraph with blanks: Fill in with the correct phrase. 'He was caught stealing, and eventually, he had to ___.'", o: ["face the music", "blow his own trumpet", "beat about the bush", "break the ice"], c: 0, u: "Unit I: English" },
+    { q: "Narration: The teacher said to the student, 'Why are you late?'", o: ["The teacher asked the student why was he late.", "The teacher asked the student why he was late.", "The teacher asked the student that why he was late.", "The teacher enquired why the student is late."], c: 1, u: "Unit I: English" },
+    { q: "Identify the error: 'The furniture(A) in(B) the room(C) were(D) broken.'", o: ["A", "B", "C", "D"], c: 3, u: "Unit I: English" },
+    { q: "Choose the correct modal: 'You ___ not enter the room without permission.' (Strict Prohibition)", o: ["should", "must", "might", "could"], c: 1, u: "Unit I: English" },
+    { q: "Choose the correct homonym: 'The ___ of the ship was very brave.'", o: ["Council", "Counsel", "Captain", "Colonel"], c: 2, u: "Unit I: English" },
+    { q: "Passive Voice: 'Who wrote this book?'", o: ["By whom was this book written?", "Who was written this book?", "By whom this book was written?", "Who had written this book?"], c: 0, u: "Unit I: English" },
+    { q: "Choose the correct article: 'He is ___ university graduate.'", o: ["a", "an", "the", "No article"], c: 0, u: "Unit I: English" },
+    { q: "Rearrange: (P) of the country / (Q) the economic / (R) depends on / (S) agriculture", o: ["PQRS", "QPRS", "QRPS", "SRQP"], c: 2, u: "Unit I: English" },
+    { q: "Identify the tense: 'I shall have been writing for two hours by then.'", o: ["Future Continuous", "Future Perfect", "Future Perfect Continuous", "Future Simple"], c: 2, u: "Unit I: English" },
+    { q: "Punctuation: Choose the correctly punctuated sentence.", o: ["What a wonderful surprise!", "What a wonderful surprise?", "What a wonderful surprise.", "what a wonderful surprise!"], c: 0, u: "Unit I: English" },
+    { q: "Preposition: 'He has a great taste ___ classical music.'", o: ["of", "for", "in", "to"], c: 1, u: "Unit I: English" },
+    { q: "Editing: Replace the underlined part. 'He **is having** a large family.'", o: ["has", "had", "was having", "No improvement"], c: 0, u: "Unit I: English" },
+    { q: "Synonym of 'Precarious':", o: ["Stable", "Dangerous", "Secure", "Vague"], c: 1, u: "Unit I: English" },
+    { q: "Antonym of 'Meticulous':", o: ["Careful", "Sloppy", "Thorough", "Detailed"], c: 1, u: "Unit I: English" },
+    { q: "Idiom: 'To turn over a new leaf' means:", o: ["To change for the better", "To read a new book", "To plant a tree", "To lose a job"], c: 0, u: "Unit I: English" },
+    { q: "Clause: 'The boy **who won the prize** is my friend.' The underlined part is:", o: ["Noun Clause", "Adjective Clause", "Adverb Clause", "Main Clause"], c: 1, u: "Unit I: English" },
+    { q: "Fill in with correct pronoun: 'Between you and ___, the secret is safe.'", o: ["I", "me", "my", "mine"], c: 1, u: "Unit I: English" },
+    { q: "Paragraph blank: 'The weather was so bad that they had to ___ the meeting.'", o: ["put off", "put on", "put up", "put out"], c: 0, u: "Unit I: English" },
+    { q: "Article: '___ Himalayas are the highest mountains.'", o: ["A", "An", "The", "No article"], c: 2, u: "Unit I: English" },
+
+    // UNIT II: GA with special reference to JK UT (20 Qs)
+    { q: "Which feature of the 2011 Census is used to measure the quality of life in a population?", o: ["Birth Rate", "Infant Mortality Rate", "Sex Ratio", "Literacy Rate"], c: 1, u: "Unit II: GA & JK" },
+    { q: "The 'Karkota Dynasty' was succeeded by which dynasty in Kashmir?", o: ["Lohara", "Utpala", "Shah Mir", "Chak"], c: 1, u: "Unit II: GA & JK" },
+    { q: "Which river in J&K is locally known as 'Surya Putri'?", o: ["Jhelum", "Chenab", "Tawi", "Indus"], c: 2, u: "Unit II: GA & JK" },
+    { q: "The 'Dachigam National Park' is primarily known for the conservation of which fauna?", o: ["Snow Leopard", "Markhor", "Hangul", "Black Bear"], c: 2, u: "Unit II: GA & JK" },
+    { q: "Which among the following is a 'Zaid' crop in Jammu and Kashmir?", o: ["Wheat", "Mustard", "Watermelon", "Maize"], c: 2, u: "Unit II: GA & JK" },
+    { q: "The climate of Jammu region is primarily:", o: ["Temperate", "Sub-tropical", "Arid", "Alpine"], c: 1, u: "Unit II: GA & JK" },
+    { q: "Who was the founder of the Dogra Dynasty?", o: ["Maharaja Hari Singh", "Maharaja Ranbir Singh", "Maharaja Gulab Singh", "Maharaja Pratap Singh"], c: 2, u: "Unit II: GA & JK" },
+    { q: "Which lake is located in the Pir Panjal range and is the source of the Vishav river?", o: ["Dal Lake", "Wular Lake", "Kausar Nag", "Manasbal"], c: 2, u: "Unit II: GA & JK" },
+    { q: "The 'Mughal Road' connects the Kashmir Valley to which district of Jammu?", o: ["Jammu", "Kathua", "Poonch", "Udhampur"], c: 2, u: "Unit II: GA & JK" },
+    { q: "Which ruler built the 'Martand Sun Temple'?", o: ["Avantivarman", "Lalitaditya Muktapida", "Zain-ul-Abidin", "Durlabhavardhana"], c: 1, u: "Unit II: GA & JK" },
+    { q: "The 'Census function' of providing a 'sampling frame' for other surveys is known as its:", o: ["Social role", "Administrative role", "Demographic role", "Statistical role"], c: 1, u: "Unit II: GA & JK" },
+    { q: "Which city is known as the 'City of Temples' in J&K?", o: ["Srinagar", "Jammu", "Udhampur", "Katra"], c: 1, u: "Unit II: GA & JK" },
+    { q: "The 'Habba Khatoon' peak is located in which district of J&K?", o: ["Ganderbal", "Bandipora", "Kupwara", "Budgam"], c: 1, u: "Unit II: GA & JK" },
+    { q: "Which river enters J&K from Tibet at a place called 'Demchok'?", o: ["Chenab", "Jhelum", "Indus", "Tawi"], c: 2, u: "Unit II: GA & JK" },
+    { q: "The 'Salal Dam' is constructed on which river?", o: ["Ravi", "Chenab", "Indus", "Tawi"], c: 1, u: "Unit II: GA & JK" },
+    { q: "In the context of J&K's economy, the 'Saffron' cultivation is largely concentrated in:", o: ["Bandipora", "Pampore", "Sopore", "Gulmarg"], c: 1, u: "Unit II: GA & JK" },
+    { q: "Who was the last ruling Maharaja of J&K?", o: ["Gulab Singh", "Ranbir Singh", "Hari Singh", "Pratap Singh"], c: 2, u: "Unit II: GA & JK" },
+    { q: "Which among the following is a major 'Tourist Destination' in the Jammu region?", o: ["Gulmarg", "Pahalgam", "Patnitop", "Sonamarg"], c: 2, u: "Unit II: GA & JK" },
+    { q: "Which district of J&K has the highest density of population as per 2011 Census?", o: ["Jammu", "Srinagar", "Ganderbal", "Samba"], c: 1, u: "Unit II: GA & JK" },
+    { q: "The 'Hokersar' wetland is primarily a sanctuary for:", o: ["Elephants", "Migratory Birds", "Tigers", "Monkeys"], c: 1, u: "Unit II: GA & JK" },
+
+    // UNIT III: NUMERICAL AND REASONING (20 Qs)
+    { q: "Arithmetic: If A can do a work in 10 days and B in 15 days, they work together for 4 days. What fraction of work is left?", o: ["1/6", "1/3", "1/2", "2/3"], c: 1, u: "Unit III: Numerical" },
+    { q: "Arithmetic: The price of an item increases by 20%, then decreases by 20%. What is the net percentage change?", o: ["No change", "4% Increase", "4% Decrease", "2% Decrease"], c: 2, u: "Unit III: Numerical" },
+    { q: "Arithmetic: Find the average of all prime numbers between 1 and 20.", o: ["9.25", "9.625", "10.125", "10.5"], c: 1, u: "Unit III: Numerical" },
+    { q: "Reasoning: If 'APPLE' is written as 'BQQMF', how is 'GUAVA' written?", o: ["HVBWB", "HVBWV", "GVBWB", "HVBWA"], c: 0, u: "Unit III: Reasoning" },
+    { q: "Reasoning: A man walks 10m North, turns right and walks 10m, then turns right again and walks 10m. How far is he from start?", o: ["10m", "20m", "0m", "30m"], c: 0, u: "Unit III: Reasoning" },
+    { q: "Arithmetic: If x:y = 3:4 and y:z = 8:9, find x:z.", o: ["1:2", "3:2", "2:3", "3:4"], c: 2, u: "Unit III: Numerical" },
+    { q: "Arithmetic: A shopkeeper buys a shirt for ₹500 and sells it for ₹600. His gain percentage is?", o: ["10%", "20%", "25%", "15%"], c: 1, u: "Unit III: Numerical" },
+    { q: "Reasoning: Pointing to a man, a woman says, 'He is the son of the only daughter of my mother'. How is the man related to the woman?", o: ["Father", "Brother", "Son", "Nephew"], c: 2, u: "Unit III: Reasoning" },
+    { q: "Arithmetic: What is the remainder when $4^{96}$ is divided by 6?", o: ["0", "2", "4", "1"], c: 2, u: "Unit III: Numerical" },
+    { q: "Reasoning: Statements: All dogs are cats. All cats are lions. Conclusion: I. All dogs are lions. II. Some lions are dogs.", o: ["Only I follows", "Only II follows", "Both follow", "Neither follows"], c: 2, u: "Unit III: Reasoning" },
+    { q: "Reasoning: Find the missing term: 2, 6, 12, 20, 30, ?", o: ["40", "42", "44", "46"], c: 1, u: "Unit III: Reasoning" },
+    { q: "Arithmetic: A train 150m long is running at 60 km/hr. Time to cross a pole is?", o: ["9 sec", "10 sec", "12 sec", "15 sec"], c: 0, u: "Unit III: Numerical" },
+    { q: "Arithmetic: Average of 10 numbers is 15. If one number 24 is replaced by 34, new average is?", o: ["16", "17", "18", "19"], c: 0, u: "Unit III: Numerical" },
+    { q: "Reasoning: If 1st Jan 2024 is Monday, what day is 1st Feb 2024?", o: ["Wednesday", "Thursday", "Friday", "Tuesday"], c: 1, u: "Unit III: Reasoning" },
+    { q: "Reasoning: Complete the series: Z, W, T, Q, ?", o: ["N", "M", "O", "P"], c: 0, u: "Unit III: Reasoning" },
+    { q: "Arithmetic: If 5 pens cost ₹25, how many pens can be bought for ₹125?", o: ["20", "25", "30", "15"], c: 1, u: "Unit III: Numerical" },
+    { q: "Reasoning: A is the brother of B. B is the sister of C. C is the father of D. How is A related to D?", o: ["Uncle", "Grandfather", "Father", "Brother"], c: 0, u: "Unit III: Reasoning" },
+    { q: "Arithmetic: Sum of angles of a triangle is?", o: ["90°", "180°", "270°", "360°"], c: 1, u: "Unit III: Numerical" },
+    { q: "Reasoning: Statement: Some kings are queens. All queens are beautiful. Conclusion: I. All kings are beautiful. II. Some kings are beautiful.", o: ["Only I follows", "Only II follows", "Both follow", "Neither follows"], c: 1, u: "Unit III: Reasoning" },
+    { q: "Arithmetic: LCM of 12 and 18 is?", o: ["24", "36", "48", "72"], c: 1, u: "Unit III: Numerical" },
+
+    // UNIT IV: BASIC CONCEPTS OF COMPUTERS (20 Qs)
+    { q: "Which component of the CPU is responsible for coordinating the flow of data?", o: ["ALU", "Control Unit", "Registers", "Cache"], c: 1, u: "Unit IV: Computers" },
+    { q: "In MS Access, which data type is used to store a long description or large text?", o: ["Short Text", "Memo (Long Text)", "Number", "Attachment"], c: 1, u: "Unit IV: Computers" },
+    { q: "Which function key is used to refresh a web page or file explorer window?", o: ["F1", "F2", "F5", "F10"], c: 2, u: "Unit IV: Computers" },
+    { q: "What is the primary function of a Primary Key in MS Access?", o: ["Sort data", "Uniquely identify records", "Calculate values", "Design reports"], c: 1, u: "Unit IV: Computers" },
+    { q: "Which part of the Operating System interacts directly with the computer hardware?", o: ["Shell", "GUI", "Kernel", "Compiler"], c: 2, u: "Unit IV: Computers" },
+    { q: "In MS Excel, which shortcut key is used to enter the current date?", o: ["Ctrl+;", "Ctrl+:", "Ctrl+D", "Alt+D"], c: 0, u: "Unit IV: Computers" },
+    { q: "What is the full form of 'BCC' in the context of email?", o: ["Basic Carbon Copy", "Business Carbon Copy", "Blind Carbon Copy", "Blind Core Copy"], c: 2, u: "Unit IV: Computers" },
+    { q: "Which of the following is an example of an 'Output Device'?", o: ["Mouse", "Scanner", "Plotter", "Keyboard"], c: 2, u: "Unit IV: Computers" },
+    { q: "The 'Spooling' feature is most associated with which hardware component?", o: ["CPU", "Printer", "RAM", "Hard Disk"], c: 1, u: "Unit IV: Computers" },
+    { q: "Which protocol is used to fetch emails from a mail server to a client?", o: ["SMTP", "HTTP", "POP3", "FTP"], c: 2, u: "Unit IV: Computers" },
+    { q: "In MS PowerPoint, which shortcut is used to start a slide show from the current slide?", o: ["F5", "Shift+F5", "Ctrl+F5", "Alt+F5"], c: 1, u: "Unit IV: Computers" },
+    { q: "What is the binary representation of decimal number 15?", o: ["1111", "1100", "1010", "1110"], c: 0, u: "Unit IV: Computers" },
+    { q: "In MS Word, which shortcut key is used for 'Paste'?", o: ["Ctrl+P", "Ctrl+V", "Ctrl+X", "Ctrl+B"], c: 1, u: "Unit IV: Computers" },
+    { q: "Which of the following is a 'Volatile' memory?", o: ["ROM", "Hard Disk", "RAM", "SSD"], c: 2, u: "Unit IV: Computers" },
+    { q: "In MS Access, which object is used to create a structured interface for data entry?", o: ["Tables", "Queries", "Forms", "Reports"], c: 2, u: "Unit IV: Computers" },
+    { q: "What is the shortcut to permanently delete a file in Windows?", o: ["Delete", "Ctrl+Delete", "Shift+Delete", "Alt+Delete"], c: 2, u: "Unit IV: Computers" },
+    { q: "Which is the main circuit board of the computer?", o: ["CPU", "Motherboard", "GPU", "RAM"], c: 1, u: "Unit IV: Computers" },
+    { q: "In Excel, which formula symbol is used to lock a cell reference (Absolute reference)?", o: ["#", "@", "$", "&"], c: 2, u: "Unit IV: Computers" },
+    { q: "What is 'Phishing'?", o: ["Connecting to a network", "Fraudulent attempt to steal data", "Speeding up CPU", "A hardware part"], c: 1, u: "Unit IV: Computers" },
+    { q: "Which file extension represents an MS Access database file?", o: [".docx", ".xlsx", ".accdb", ".pptx"], c: 2, u: "Unit IV: Computers" }
+];
+
+let cur = 0;
+let userAns = new Array(80).fill(null);
+let time = 80 * 60;
+
+function init() {
+    render();
+    timer();
+}
+
+function render() {
+    const q = data[cur];
+    document.getElementById('unit-label').innerText = q.u;
+    document.getElementById('q-idx').innerText = cur + 1;
+    document.getElementById('q-display').innerText = q.q;
+    const optDiv = document.getElementById('opt-display');
+    optDiv.innerHTML = '';
+    q.o.forEach((txt, i) => {
+        const d = document.createElement('div');
+        d.className = `option ${userAns[cur] === i ? 'selected' : ''}`;
+        d.innerText = txt;
+        d.onclick = () => { userAns[cur] = i; render(); };
+        optDiv.appendChild(d);
+    });
+    document.getElementById('p-bar').style.width = ((cur + 1) / 80 * 100) + "%";
+}
+
+function nav(dir) {
+    if (dir === 1 && cur === 79) { finish(); return; }
+    cur += dir;
+    if (cur < 0) cur = 0;
+    render();
+}
+
+function timer() {
+    const itv = setInterval(() => {
+        time--;
+        const m = Math.floor(time / 60);
+        const s = time % 60;
+        document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' + s : s}`;
+        if (time <= 0) { clearInterval(itv); finish(); }
+    }, 1000);
+}
+
+function finish() {
+    document.getElementById('quiz-box').style.display = 'none';
+    document.getElementById('results').style.display = 'block';
+    let s = 0;
+    let b = { "Unit I: English": 0, "Unit II: GA & JK": 0, "Unit III: Numerical": 0, "Unit IV: Computer": 0 };
+    data.forEach((q, i) => {
+        if (userAns[i] === q.c) {
+            s++;
+            if (i < 20) b["Unit I: English"]++;
+            else if (i < 40) b["Unit II: GA & JK"]++;
+            else if (i < 60) b["Unit III: Numerical"]++;
+            else b["Unit IV: Computer"]++;
+        }
+    });
+    document.getElementById('score-val').innerText = `${s}/80`;
+    const bDiv = document.getElementById('breakdown');
+    bDiv.innerHTML = `
+        <div>General English: ${b["Unit I: English"]}/20</div>
+        <div>GA & JK UT: ${b["Unit II: GA & JK"]}/20</div>
+        <div>Math & Reasoning: ${b["Unit III: Numerical"]}/20</div>
+        <div>Computer Concepts: ${b["Unit IV: Computer"]}/20</div>
+    `;
+}
+
+init();
+</script>
+</body>
+</html>
