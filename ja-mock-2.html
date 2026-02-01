@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JKSSB Mock Test</title>
+
+<style>
+body{
+  font-family: Arial, sans-serif;
+  background:#f1f5f9;
+  margin:0;
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  background:#fff;
+  padding:20px;
+  min-height:100vh;
+}
+h1,h2{color:#0f172a}
+.btn{
+  padding:10px 18px;
+  border:none;
+  background:#2563eb;
+  color:#fff;
+  border-radius:6px;
+  cursor:pointer;
+}
+.btn:disabled{background:#94a3b8}
+.option{
+  padding:12px;
+  border:1px solid #cbd5f5;
+  border-radius:6px;
+  margin-bottom:10px;
+  cursor:pointer;
+}
+.option.selected{
+  background:#e0e7ff;
+  border-color:#2563eb;
+}
+.timer{
+  float:right;
+  font-weight:bold;
+  color:#dc2626;
+}
+.hidden{display:none}
+</style>
+</head>
+
+<body>
+
+<!-- ================= INSTRUCTIONS PAGE ================= -->
+<div class="container" id="intro">
+  <h1>JKSSB MOCK TEST</h1>
+  <p><b>Instructions:</b></p>
+  <ul>
+    <li>Total Questions: 80</li>
+    <li>Total Time: 80 Minutes</li>
+    <li>Each question carries 1 mark</li>
+    <li>No negative marking</li>
+  </ul>
+  <button class="btn" onclick="startTest()">Start Test</button>
+</div>
+
+<!-- ================= QUIZ PAGE ================= -->
+<div class="container hidden" id="quiz">
+  <div class="timer" id="timer">80:00</div>
+  <h2 id="section">Section</h2>
+  <p><b>Question <span id="qNo">1</span> / <span id="totalQ">0</span></b></p>
+  <p id="question">Question text</p>
+  <div id="options"></div>
+
+  <br>
+  <button class="btn" onclick="prevQ()">Previous</button>
+  <button class="btn" onclick="nextQ()">Next</button>
+</div>
+
+<!-- ================= RESULT PAGE ================= -->
+<div class="container hidden" id="result">
+  <h1>Result</h1>
+  <h2 id="score"></h2>
+  <button class="btn" onclick="location.reload()">Restart</button>
+</div>
+
+<script>
+
+const questions = [
+// ===== ENGLISH (QUESTIONS 1–20) =====
+const englishSection = [
+  {
+    s: "English",
+    q: "Choose the correct sentence using 'lest':",
+    o: [
+      "Work hard lest you will fail.",
+      "Work hard lest you should fail.",
+      "Work hard lest you might fail.",
+      "Work hard lest you fail."
+    ],
+    a: 1
+  },
+  {
+    s: "English",
+    q: "Choose the synonym of 'EPHEMERAL':",
+    o: ["Eternal", "Transient", "Spiteful", "Resilient"],
+    a: 1
+  },
+  {
+    s: "English",
+    q: "Change into Passive Voice: 'It is time to take tea.'",
+    o: [
+      "It is time tea to be taken.",
+      "It is time for tea to be taken.",
+      "Tea is time to be taken.",
+      "It was time for tea to be taken."
+    ],
+    a: 1
+  },
+  {
+    s: "English",
+    q: "Select the correctly punctuated sentence:",
+    o: [
+      "The teacher said, 'Be quiet.'",
+      "The teacher said 'Be quiet'.",
+      "The teacher said, Be quiet.",
+      "The teacher, said 'Be quiet'!"
+    ],
+    a: 0
+  },
+  {
+    s: "English",
+    q: "Choose the antonym of 'OBSEQUIOUS':",
+    o: ["Subservient", "Domineering", "Flattering", "Passive"],
+    a: 1
+  },
+  {
+    s: "English",
+    q: "Fill in the blank: 'Scarcely had he reached the station ___ the train started.'",
+    o: ["than", "then", "when", "that"],
+    a: 2
+  },
+  {
+    s: "English",
+    q: "Meaning of the idiom 'To pay through the nose':",
+    o: [
+      "To pay an extremely high price",
+      "To get a cheap deal",
+      "To pay under pressure",
+      "To avoid payment"
+    ],
+    a: 0
+  },
+  {
+    s: "English",
+    q: "Identify the clause: 'I know where he lives.'",
+    o: ["Adjective Clause", "Adverb Clause", "Noun Clause", "Principal Clause"],
+    a: 2
+  },
+  {
+    s: "English",
+    q: "Which of the following is a Gerund?",
+    o: [
+      "He is running.",
+      "Running is good for health.",
+      "I want to run.",
+      "She ran fast."
+    ],
+    a: 1
+  },
+  {
+    s: "English",
+    q: "Narration: She said to me, 'Wait here until I come back.'",
+    o: [
+      "She asked me wait there until she came back.",
+      "She told me to wait there until she came back.",
+      "She says me to wait there until she comes back.",
+      "She told me wait here until she come back."
+    ],
+    a: 1
+  },
+  {
+    s: "English",
+    q: "Change Voice: 'They are building a wall.'",
+    o: [
+      "A wall is being built by them.",
+      "A wall was being built by them.",
+      "A wall has been built by them.",
+      "A wall is built by them."
+    ],
+    a: 0
+  },
+  {
+    s: "English",
+    q: "Sentence Improvement: 'He is as tall as me.'",
+    o: [
+      "as tall as I",
+      "taller as I",
+      "as tall as I am",
+      "No improvement"
+    ],
+    a: 2
+  },
+  {
+    s: "English",
+    q: "Choose the correct word: 'This medicine will ___ your pain.'",
+    o: ["affect", "effect", "expect", "accept"],
+    a: 1
+  },
+  {
+    s: "English",
+    q: "Fill in the blank: 'The cat jumped ___ the wall.'",
+    o: ["over", "above", "onto", "upon"],
+    a: 0
+  },
+  {
+    s: "English",
+    q: "Choose the correct phrase: 'You had better ___ some money for your future.'",
+    o: ["to save", "saving", "save", "saved"],
+    a: 2
+  },
+  {
+    s: "English",
+    q: "According to the passage, by what year was the trans fat content capped to 3%?",
+    o: ["2016", "2020", "2021", "2022"],
+    a: 2
+  },
+  {
+    s: "English",
+    q: "Which year is the WHO target year for achieving the 2% trans fat limit?",
+    o: ["2021", "2022", "2023", "2024"],
+    a: 2
+  },
+  {
+    s: "English",
+    q: "Identify the part with error: 'Scarcely had the party (A) / begun (B) / than the uninvited (C) / guests arrived (D).'",
+    o: ["A", "B", "C", "D"],
+    a: 2
+  },
+  {
+    s: "English",
+    q: "Rearrange to form a correct sentence:\n(A) the more we delve into the quantum realm\n(B) that defies our classical understanding of reality\n(C) only to encounter a level of unpredictability\n(D) the more we seem to peel back the layers of cosmic certainty",
+    o: [
+      "A - D - C - B",
+      "D - A - C - B",
+      "A - C - B - D",
+      "D - C - B - A"
+    ],
+    a: 1
+  },
+  {
+    s: "English",
+    q: "Choose the correct articles: 'The philosophy of ___ Schopenhauer suggests that ___ life is often ___ arduous struggle against the Will.'",
+    o: [
+      "The / (no article) / (no article)",
+      "(no article) / the / the / an",
+      "The / the / a / the",
+      "A / (no article) / (no article) / the"
+    ],
+    a: 0
+  }
+];
+  // ===== JK GK (QUESTIONS 21–40) =====
+const jkGKSection = [
+  {
+    s: "JK GK",
+    q: "Consider the following statements about River Jhelum:",
+    t: "1. It originates from Verinag Spring at the foot of Pir Panjal.\n2. It flows through Srinagar and into Wular Lake.\n3. It enters Pakistan through a gorge at Baramulla.",
+    o: ["Only 1 and 2", "Only 2 and 3", "Only 1 and 3", "All 1, 2, and 3"],
+    a: 3
+  },
+  {
+    s: "JK GK",
+    q: "Regarding Saffron cultivation in J&K, identify the CORRECT statement:",
+    t: "I. It is primarily grown in the Karewas of Pampore.\nII. It requires a specific climate of the Jammu plains.\nIII. J&K is the only producer of Saffron in India.",
+    o: ["Only I", "Only II", "Only I and III", "All are correct"],
+    a: 2
+  },
+  {
+    s: "JK GK",
+    q: "Match the Temple with the Dynasty/Ruler:",
+    t: "A. Martand Sun Temple – Lalitaditya (Karkota)\nB. Avantiswami Temple – Avantivarman (Utpala)\nC. Shankaracharya Temple – Jaluka (Maurya)",
+    o: [
+      "Only A and B correctly matched",
+      "Only B and C correctly matched",
+      "Only A and C correctly matched",
+      "All A, B, and C correctly matched"
+    ],
+    a: 3
+  },
+  {
+    s: "JK GK",
+    q: "Consider the following statements about J&K Climate:",
+    t: "1. Jammu has a Sub-tropical climate.\n2. Kashmir has a Continental climate.\n3. Ladakh has a Cold Desert climate.",
+    o: ["Only 1", "Only 2", "Only 3", "All 1, 2 and 3"],
+    a: 3
+  },
+  {
+    s: "JK GK",
+    q: "Arrange the following rulers of Kashmir in CHRONOLOGICAL order:",
+    t: "1. Lalitaditya Muktapida\n2. Zain-ul-Abidin\n3. Gulab Singh\n4. Shah Mir",
+    o: ["1, 4, 2, 3", "1, 2, 4, 3", "4, 1, 2, 3", "1, 4, 3, 2"],
+    a: 0
+  },
+  {
+    s: "JK GK",
+    q: "Which soil is locally known as 'Gurtu' in the Kashmir valley?",
+    o: ["Clayey soil", "Loamy soil", "Sandy soil", "Peaty soil"],
+    a: 0
+  },
+  {
+    s: "JK GK",
+    q: "The 'Durbar Move' was started in 1872 by:",
+    o: [
+      "Maharaja Gulab Singh",
+      "Maharaja Ranbir Singh",
+      "Maharaja Pratap Singh",
+      "Maharaja Hari Singh"
+    ],
+    a: 1
+  },
+  {
+    s: "JK GK",
+    q: "According to Census 2011, which district has the lowest population density in J&K UT?",
+    o: ["Jammu", "Kishtwar", "Doda", "Leh (former J&K context)"],
+    a: 1
+  },
+  {
+    s: "JK GK",
+    q: "The 'Habba Khatoon' peak is located in which district?",
+    o: ["Ganderbal", "Bandipora", "Kupwara", "Baramulla"],
+    a: 1
+  },
+  {
+    s: "JK GK",
+    q: "The 'Durga Puja' festival in Jammu is highly associated with which heritage site?",
+    o: ["Bahu Fort", "Hari Parbat", "Mubarak Mandi", "Amar Mahal"],
+    a: 0
+  },
+  {
+    s: "JK GK",
+    q: "Consider the following statements regarding Wular Lake:",
+    t: "1. It is the largest freshwater lake in India.\n2. It was formed as a result of tectonic activity.\n3. River Jhelum flows through it.",
+    o: ["1 and 2 only", "1 and 3 only", "2 and 3 only", "1, 2 and 3"],
+    a: 3
+  },
+  {
+    s: "JK GK",
+    q: "With reference to the Karewa formations of Kashmir Valley, consider the following statements:",
+    t: "1. They are lacustrine deposits.\n2. Saffron cultivation is associated with them.\n3. They belong mainly to the Tertiary period.",
+    o: ["1 and 2 only", "2 and 3 only", "1 and 3 only", "1, 2 and 3"],
+    a: 3
+  },
+  {
+    s: "JK GK",
+    q: "Which of the following rivers of Jammu & Kashmir are correctly matched with their ancient names?",
+    t: "1. Jhelum – Vitasta\n2. Chenab – Asikni\n3. Ravi – Purushni\n4. Beas – Vipasha",
+    o: [
+      "1 and 2 only",
+      "1, 2 and 3 only",
+      "2, 3 and 4 only",
+      "1, 2, 3 and 4"
+    ],
+    a: 3
+  },
+  {
+    s: "JK GK",
+    q: "Which of the following statements about the Indus river system in J&K is correct?",
+    o: [
+      "Indus enters India through Zoji La pass",
+      "Shyok and Zanskar are left bank tributaries of Indus",
+      "Indus flows east to west in Ladakh",
+      "Indus originates from Mansarovar Lake"
+    ],
+    a: 2
+  },
+  {
+    s: "JK GK",
+    q: "Who among the following introduced the policy of religious tolerance and social reforms in medieval Kashmir?",
+    o: ["Shah Mir", "Sikandar Butshikan", "Zain-ul-Abidin", "Yousuf Shah Chak"],
+    a: 2
+  },
+  {
+    s: "JK GK",
+    q: "Which of the following pairs of mountain passes and regions they connect is NOT correctly matched?",
+    o: [
+      "Banihal Pass – Jammu & Kashmir",
+      "Zojila Pass – Kashmir & Ladakh",
+      "Sinthan Pass – Anantnag & Kishtwar",
+      "Pirgali Pass – Rajouri & Poonch"
+    ],
+    a: 0
+  },
+  {
+    s: "JK GK",
+    q: "Burzahom is significant in the history of Kashmir because it represents:",
+    o: [
+      "Megalithic culture",
+      "Harappan culture",
+      "Neolithic pit-dwelling culture",
+      "Chalcolithic culture"
+    ],
+    a: 2
+  },
+  {
+    s: "JK GK",
+    q: "Which project is known as the 'Lifeline of Jammu'?",
+    o: ["Ranbir Canal", "Baglihar Project", "Salal Project", "Ravi–Tawi Project"],
+    a: 0
+  },
+  {
+    s: "JK GK",
+    q: "Which pass is known as the 'Gateway to Ladakh'?",
+    o: ["Banihal Pass", "Zojila Pass", "Fotu La", "Sinthan Pass"],
+    a: 1
+  }
+];
+  
+// ===== COMPUTERS (QUESTIONS 41–60) =====
+const computerSection = [
+  {
+    s: "Computers",
+    q: "Which register stores the address of the next instruction?",
+    o: ["Accumulator", "Program Counter", "Stack Pointer", "IR"],
+    a: 1
+  },
+  {
+    s: "Computers",
+    q: "Ctrl + Shift + D in MS Word applies:",
+    o: ["Dashed line", "Double underline", "Dot line", "None"],
+    a: 1
+  },
+  {
+    s: "Computers",
+    q: "Which protocol is used for dynamically assigning IP addresses?",
+    o: ["DNS", "DHCP", "FTP", "SMTP"],
+    a: 1
+  },
+  {
+    s: "Computers",
+    q: "The CPU register that holds data for arithmetic and logic operations is:",
+    o: ["Accumulator", "Program Counter", "Stack Pointer", "Instruction Register"],
+    a: 0
+  },
+  {
+    s: "Computers",
+    q: "In MS Excel 2019, the shortcut key 'Ctrl + 2' applies:",
+    o: ["Italic", "Bold", "Underline", "Formula"],
+    a: 1
+  },
+  {
+    s: "Computers",
+    q: "Which shortcut toggles Gridlines in MS PowerPoint 2019?",
+    o: ["Alt + F9", "Ctrl + F9", "Shift + F9", "Tab + F9"],
+    a: 2
+  },
+  {
+    s: "Computers",
+    q: "What type of operating system allows multiple users to access a single computer system simultaneously?",
+    o: ["Single-user OS", "Multi-user OS", "Real-time OS", "Batch OS"],
+    a: 1
+  },
+  {
+    s: "Computers",
+    q: "What is the shortcut key to permanently delete a file in Windows?",
+    o: ["Delete", "Ctrl + Delete", "Shift + Delete", "Alt + Delete"],
+    a: 2
+  },
+  {
+    s: "Computers",
+    q: "In MS Access, which data type is used to store large text or long descriptions?",
+    o: ["Short Text", "Memo (Long Text)", "Number", "AutoNumber"],
+    a: 1
+  },
+  {
+    s: "Computers",
+    q: "Which protocol is used to transfer files over the Internet?",
+    o: ["HTTP", "SMTP", "FTP", "TELNET"],
+    a: 2
+  },
+  {
+    s: "Computers",
+    q: "What is the function of Spooling in an operating system?",
+    o: ["Memory management", "I/O job queuing", "CPU scheduling", "Security"],
+    a: 1
+  },
+  {
+    s: "Computers",
+    q: "In MS Excel, which shortcut key inserts the current date?",
+    o: ["Ctrl + ;", "Ctrl + :", "Alt + Shift + D", "Ctrl + Shift + ;"],
+    a: 0
+  },
+  {
+    s: "Computers",
+    q: "Which component of CPU controls and coordinates all operations?",
+    o: ["ALU", "Control Unit", "Registers", "Cache"],
+    a: 1
+  },
+  {
+    s: "Computers",
+    q: "Which of the following best describes a deadlock?",
+    o: [
+      "CPU utilization is 100%",
+      "Processes wait indefinitely for resources held by each other",
+      "Process completes execution",
+      "Memory becomes full"
+    ],
+    a: 1
+  },
+  {
+    s: "Computers",
+    q: "In DBMS, which normal form removes transitive dependency?",
+    o: ["1NF", "2NF", "3NF", "BCNF"],
+    a: 2
+  },
+  {
+    s: "Computers",
+    q: "Which scheduling algorithm may cause starvation?",
+    o: ["Round Robin", "FCFS", "Shortest Job First", "FIFO"],
+    a: 2
+  },
+  {
+    s: "Computers",
+    q: "What is the primary purpose of cache memory?",
+    o: [
+      "Permanent storage",
+      "Increase storage size",
+      "Reduce access time of frequently used data",
+      "Backup storage"
+    ],
+    a: 2
+  },
+  {
+    s: "Computers",
+    q: "Which of the following is NOT a type of database index?",
+    o: ["Primary Index", "Secondary Index", "Clustered Index", "Sequential Index"],
+    a: 3
+  },
+  {
+    s: "Computers",
+    q: "Which device works at Network Layer (Layer 3) of OSI Model?",
+    o: ["Hub", "Switch", "Router", "Repeater"],
+    a: 2
+  },
+  {
+    s: "Computers",
+    q: "Which memory allocation technique suffers from external fragmentation?",
+    o: ["Paging", "Segmentation", "Virtual Memory", "Cache Mapping"],
+    a: 1
+  }
+];
+  
+// ===== MATHS & REASONING (QUESTIONS 61–80) =====
+const mathReasoningSection = [
+  {
+    s: "Maths",
+    q: "If 616 marks of A and 462 marks of B, B is what percent of A?",
+    o: ["75", "80", "85", "90"],
+    a: 0
+  },
+  {
+    s: "Maths",
+    q: "Find the unit digit of (538 × 1052 × 3312 × 8328).",
+    o: ["8", "6", "12", "10"],
+    a: 1
+  },
+  {
+    s: "Maths",
+    q: "Ratio of boys to girls is 3:5, total students are 64. Number of girls?",
+    o: ["40", "32", "24", "20"],
+    a: 0
+  },
+  {
+    s: "Maths",
+    q: "If a number is increased by 20% and then decreased by 20%, what is the net change?",
+    o: ["No change", "4% increase", "4% decrease", "2% decrease"],
+    a: 2
+  },
+  {
+    s: "Maths",
+    q: "Average of 10 numbers is 42. If one number is removed, the average becomes 40. The removed number is:",
+    o: ["62", "60", "58", "56"],
+    a: 0
+  },
+  {
+    s: "Maths",
+    q: "Simple interest on ₹5000 at 10% per annum for 2 years is:",
+    o: ["900", "1000", "1100", "1200"],
+    a: 1
+  },
+  {
+    s: "Maths",
+    q: "If x : y = 4 : 5 and y : z = 10 : 11, then x : z is:",
+    o: ["8 : 11", "4 : 11", "40 : 55", "8 : 22"],
+    a: 0
+  },
+  {
+    s: "Maths",
+    q: "A train travels 360 km at a speed of 60 km/hr. Time taken is:",
+    o: ["5 hours", "6 hours", "7 hours", "4 hours"],
+    a: 1
+  },
+  {
+    s: "Reasoning",
+    q: "Find the missing number in the series: 2, 6, 12, 20, ?",
+    o: ["28", "30", "32", "36"],
+    a: 1
+  },
+  {
+    s: "Maths",
+    q: "If cost price is ₹800 and profit is 25%, then selling price is:",
+    o: ["950", "1000", "1050", "1100"],
+    a: 1
+  },
+  {
+    s: "Maths",
+    q: "LCM of 12 and 18 is:",
+    o: ["24", "36", "72", "48"],
+    a: 1
+  },
+  {
+    s: "Maths",
+    q: "HCF of 54 and 72 is:",
+    o: ["6", "9", "18", "12"],
+    a: 2
+  },
+  {
+    s: "Reasoning",
+    q: "A man walks 5 km east and then 3 km west. How far is he from the starting point?",
+    o: ["2 km", "3 km", "8 km", "5 km"],
+    a: 0
+  },
+  {
+    s: "Maths",
+    q: "If 3 pens cost ₹45, what is the cost of 10 pens?",
+    o: ["120", "150", "100", "180"],
+    a: 1
+  },
+  {
+    s: "Maths",
+    q: "Average of first 50 natural numbers is:",
+    o: ["24.5", "25", "25.5", "26"],
+    a: 1
+  },
+  {
+    s: "Reasoning",
+    q: "Find the next term in the series: 1, 4, 9, 16, ?",
+    o: ["20", "24", "25", "30"],
+    a: 2
+  },
+  {
+    s: "Maths",
+    q: "If 5 workers complete a work in 10 days, how many days will 10 workers take?",
+    o: ["5", "6", "7", "4"],
+    a: 0
+  },
+  {
+    s: "Maths",
+    q: "Percentage increase from 200 to 260 is:",
+    o: ["25%", "30%", "20%", "35%"],
+    a: 1
+  },
+  {
+    s: "Maths",
+    q: "Selling price is ₹720 with a loss of 10%. The cost price is:",
+    o: ["800", "780", "750", "820"],
+    a: 0
+  },
+  {
+    s: "Maths",
+    q: "Find the remainder when 12345 is divided by 9.",
+    o: ["3", "6", "0", "9"],
+    a: 1
+  }
+];
+
+]; 
+// ================= LOGIC =================
+let current = 0;
+let answers = [];
+let time = 80 * 60;
+let timerInt;
+
+document.getElementById("totalQ").innerText = questions.length;
+
+function startTest(){
+  document.getElementById("intro").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  startTimer();
+  loadQ();
+}
+
+function loadQ(){
+  let q = questions[current];
+  document.getElementById("section").innerText = q.s;
+  document.getElementById("qNo").innerText = current + 1;
+  document.getElementById("question").innerText = q.q;
+  let optBox = document.getElementById("options");
+  optBox.innerHTML = "";
+  q.o.forEach((opt,i)=>{
+    let div = document.createElement("div");
+    div.className = "option " + (answers[current]===i?"selected":"");
+    div.innerText = opt;
+    div.onclick = ()=>{answers[current]=i; loadQ();}
+    optBox.appendChild(div);
+  });
+}
+
+function nextQ(){
+  if(current < questions.length-1){current++; loadQ();}
+  else finish();
+}
+function prevQ(){
+  if(current>0){current--; loadQ();}
+}
+
+function finish(){
+  clearInterval(timerInt);
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
+  let score = 0;
+  questions.forEach((q,i)=>{ if(answers[i]===q.a) score++; });
+  document.getElementById("score").innerText = `Score: ${score} / ${questions.length}`;
+}
+
+function startTimer(){
+  timerInt = setInterval(()=>{
+    time--;
+    let m = Math.floor(time/60);
+    let s = time%60;
+    document.getElementById("timer").innerText = `${m}:${s<10?'0'+s:s}`;
+    if(time<=0) finish();
+  },1000);
+}
+</script>
+
+</body>
+</html>
