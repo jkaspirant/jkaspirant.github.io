@@ -47,9 +47,7 @@ h1,h2{color:#0f172a}
 .hidden{display:none}
 </style>
 </head>
-
 <body>
-
 <!-- ================= INSTRUCTIONS PAGE ================= -->
 <div class="container" id="intro">
   <h1>JKSSB MOCK TEST2</h1>
@@ -97,7 +95,6 @@ let currentQuestion = 0;
 let userAnswers = new Array(TOTAL_QUESTIONS).fill(null);
 let timeLeft = TOTAL_TIME;
 /* ================== */
-
 const questions = [
 // ===== ENGLISH (QUESTIONS 1–20) =====
   {
@@ -684,71 +681,81 @@ const questions = [
 ];
 
 // ================= LOGIC =================
-let current = 0;
-let answers = [];
-let time = 80 * 60;
-let timerInt;
 
 document.getElementById("totalQ").innerText = questions.length;
 
-function startTest(){
+function startTest() {
   document.getElementById("intro").classList.add("hidden");
   document.getElementById("quiz").classList.remove("hidden");
+  loadQuestion();
   startTimer();
-  loadQ();
 }
 
-function loadQ(){
-  let q = questions[current];
+function loadQuestion() {
+  const q = questions[currentQuestion];
   document.getElementById("section").innerText = q.s;
-  document.getElementById("qNo").innerText = current + 1;
+  document.getElementById("qNo").innerText = currentQuestion + 1;
   document.getElementById("question").innerText = q.q;
-  let optBox = document.getElementById("options");
+
+  const optBox = document.getElementById("options");
   optBox.innerHTML = "";
-  q.o.forEach((opt,i)=>{
-    let div = document.createElement("div");
-    div.className = "option " + (answers[current]===i?"selected":"");
+
+  q.o.forEach((opt, i) => {
+    const div = document.createElement("div");
+    div.className = "option" + (userAnswers[currentQuestion] === i ? " selected" : "");
     div.innerText = opt;
-    div.onclick = ()=>{answers[current]=i; loadQ();}
+    div.onclick = () => {
+      userAnswers[currentQuestion] = i;
+      loadQuestion();
+    };
     optBox.appendChild(div);
   });
 }
 
-function nextQ(){
-  if(current < questions.length-1){current++; loadQ();}
-  else finish();
-}
-function prevQ(){
-  if(current>0){current--; loadQ();}
+function nextQ() {
+  if (currentQuestion < questions.length - 1) {
+    currentQuestion++;
+    loadQuestion();
+  } else {
+    finish();
+  }
 }
 
-function finish(){
+function prevQ() {
+  if (currentQuestion > 0) {
+    currentQuestion--;
+    loadQuestion();
+  }
+}
+
+function finish() {
   clearInterval(timerInt);
   document.getElementById("quiz").classList.add("hidden");
   document.getElementById("result").classList.remove("hidden");
-  let score = 0;
 
-questions.forEach((q,i)=>{
-  if(answers[i] === q.a){
-    score += MARK_CORRECT;
-  } else if(answers[i] !== null){
-    score += MARK_WRONG;
-  }
-});
-  document.getElementById("score").innerText = `Score: ${score} / ${questions.length}`;
+  let score = 0;
+  questions.forEach((q, i) => {
+    if (userAnswers[i] === q.a) score += MARK_CORRECT;
+    else if (userAnswers[i] !== null) score += MARK_WRONG;
+  });
+
+  document.getElementById("score").innerText =
+    `Score: ${score} / ${questions.length}`;
 }
 
-function startTimer(){
-  timerInt = setInterval(()=>{
-    time--;
-    let m = Math.floor(time/60);
-    let s = time%60;
-    document.getElementById("timer").innerText = `${m}:${s<10?'0'+s:s}`;
-    if(time <= 0){
-  clearInterval(timerInt);
-  finish();
+function startTimer() {
+  timerInt = setInterval(() => {
+    timeLeft--;
+    const m = Math.floor(timeLeft / 60);
+    const s = timeLeft % 60;
+    document.getElementById("timer").innerText =
+      `${m}:${s < 10 ? "0" + s : s}`;
+
+    if (timeLeft <= 0) {
+      clearInterval(timerInt);
+      finish();
     }
-  },1000);
+  }, 1000);
 }
 </script>
 
