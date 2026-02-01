@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JKSSB Mock Test</title>
+<title>JKSSB Mock Test2</title>
 
 <style>
 body{
@@ -52,13 +52,13 @@ h1,h2{color:#0f172a}
 
 <!-- ================= INSTRUCTIONS PAGE ================= -->
 <div class="container" id="intro">
-  <h1>JKSSB MOCK TEST</h1>
+  <h1>JKSSB MOCK TEST2</h1>
   <p><b>Instructions:</b></p>
   <ul>
     <li>Total Questions: 80</li>
     <li>Total Time: 80 Minutes</li>
     <li>Each question carries 1 mark</li>
-    <li>No negative marking</li>
+<li>Negative marking: 0.25 mark for each wrong answer</li>
   </ul>
   <button class="btn" onclick="startTest()">Start Test</button>
 </div>
@@ -84,10 +84,22 @@ h1,h2{color:#0f172a}
 </div>
 
 <script>
+/* ====== CONFIG ====== */
+const TOTAL_QUESTIONS = 80;
+const TOTAL_TIME = 80 * 60; // seconds
+
+const MARK_CORRECT = 1;
+const MARK_WRONG = -0.25;
+/* ==================== */
+
+/* ====== STATE ====== */
+let currentQuestion = 0;
+let userAnswers = new Array(TOTAL_QUESTIONS).fill(null);
+let timeLeft = TOTAL_TIME;
+/* ================== */
 
 const questions = [
 // ===== ENGLISH (QUESTIONS 1–20) =====
-const englishSection = [
   {
     s: "English",
     q: "Choose the correct sentence using 'lest':",
@@ -260,7 +272,6 @@ const englishSection = [
   }
 ];
   // ===== JK GK (QUESTIONS 21–40) =====
-const jkGKSection = [
   {
     s: "JK GK",
     q: "Consider the following statements about River Jhelum:",
@@ -416,7 +427,6 @@ const jkGKSection = [
 ];
   
 // ===== COMPUTERS (QUESTIONS 41–60) =====
-const computerSection = [
   {
     s: "Computers",
     q: "Which register stores the address of the next instruction?",
@@ -550,7 +560,7 @@ const computerSection = [
 ];
   
 // ===== MATHS & REASONING (QUESTIONS 61–80) =====
-const mathReasoningSection = [
+
   {
     s: "Maths",
     q: "If 616 marks of A and 462 marks of B, B is what percent of A?",
@@ -673,7 +683,6 @@ const mathReasoningSection = [
   }
 ];
 
-]; 
 // ================= LOGIC =================
 let current = 0;
 let answers = [];
@@ -718,7 +727,14 @@ function finish(){
   document.getElementById("quiz").classList.add("hidden");
   document.getElementById("result").classList.remove("hidden");
   let score = 0;
-  questions.forEach((q,i)=>{ if(answers[i]===q.a) score++; });
+
+questions.forEach((q,i)=>{
+  if(answers[i] === q.a){
+    score += MARK_CORRECT;
+  } else if(answers[i] !== null){
+    score += MARK_WRONG;
+  }
+});
   document.getElementById("score").innerText = `Score: ${score} / ${questions.length}`;
 }
 
@@ -728,7 +744,10 @@ function startTimer(){
     let m = Math.floor(time/60);
     let s = time%60;
     document.getElementById("timer").innerText = `${m}:${s<10?'0'+s:s}`;
-    if(time<=0) finish();
+    if(time <= 0){
+  clearInterval(timerInt);
+  finish();
+    }
   },1000);
 }
 </script>
