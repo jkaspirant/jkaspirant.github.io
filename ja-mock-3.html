@@ -5,64 +5,71 @@
   <title>JA Mock Test 3</title>
 
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    .hidden {
-      display: none;
-    }
-    .option {
-      border: 1px solid #ccc;
-      padding: 10px;
-      margin: 8px 0;
-      cursor: pointer;
-    }
-    .option.selected {
-      background: #d1fae5;
-      border-color: green;
-    }
-  </style>
-</head>
+<h1>JKSSB MOCK TEST 3</h1>
 
-<body>
+<div id="intro">
+  <button onclick="startTest()">Start Test</button>
+</div>
 
-  <!-- START PAGE -->
-  <h1 id="title">JKSSB MOCK TEST 3</h1>
-  <button onclick="startTest()">Start</button>
+<div id="quiz" style="display:none;">
+  <h3 id="question">Question text</h3>
 
-  <!-- QUESTION PAGE -->
-  <div id="quiz" class="hidden">
-    <h2 id="question">Question text</h2>
+  <div id="options"></div>
 
-    <div class="option" onclick="selectOption(this)">Option A</div>
-    <div class="option" onclick="selectOption(this)">Option B</div>
-    <div class="option" onclick="selectOption(this)">Option C</div>
-    <div class="option" onclick="selectOption(this)">Option D</div>
-  </div>
+  <br>
+  <button onclick="nextQ()">Next</button>
+</div>
+<script>
+const questions = [
+  {
+    q: "Choose the correct sentence:",
+    o: [
+      "He go to school daily",
+      "He goes to school daily",
+      "He gone to school daily",
+      "He going to school daily"
+    ]
+  },
+  {
+    q: "Synonym of HAPPY is:",
+    o: ["Sad", "Angry", "Joyful", "Tired"]
+  }
+];
 
-  <script>
-    function startTest() {
-      document.getElementById("title").classList.add("hidden");
-      document.querySelector("button").classList.add("hidden");
+let current = 0;
 
-      document.getElementById("quiz").classList.remove("hidden");
+function startTest() {
+  document.getElementById("intro").style.display = "none";
+  document.getElementById("quiz").style.display = "block";
+  loadQuestion();
+}
 
-      document.getElementById("question").innerText =
-        "Choose the correct synonym of 'EPHEMERAL'";
-    }
+function loadQuestion() {
+  const q = questions[current];
+  document.getElementById("question").innerText = q.q;
 
-    function selectOption(el) {
-      const options = document.querySelectorAll(".option");
-      options.forEach(o => o.classList.remove("selected"));
-      el.classList.add("selected");
-    }
-  </script>
+  const box = document.getElementById("options");
+  box.innerHTML = "";
 
+  q.o.forEach(opt => {
+    const div = document.createElement("div");
+    div.innerText = opt;
+    box.appendChild(div);
+  });
+}
+
+function nextQ() {
+  if (current < questions.length - 1) {
+    current++;
+    loadQuestion();
+  } else {
+    alert("End of mock 👍");
+  }
+}
+</script>
+    
 </body>
 </html>
 
-
-
-
-
+    
+  
