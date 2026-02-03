@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>JA Mock Test 3</title>
+  <title>JKSSB Mock 3</title>
+</head>
 
-  <style>
+<body>
+
 <h1>JKSSB MOCK TEST 3</h1>
 
 <div id="intro">
@@ -12,64 +14,63 @@
 </div>
 
 <div id="quiz" style="display:none;">
-  <h3 id="question">Question text</h3>
-
+  <h3 id="question"></h3>
   <div id="options"></div>
-
   <br>
   <button onclick="nextQ()">Next</button>
 </div>
+
 <script>
-const questions = [
-  {
-    q: "Choose the correct sentence:",
-    o: [
-      "He go to school daily",
-      "He goes to school daily",
-      "He gone to school daily",
-      "He going to school daily"
-    ]
-  },
-  {
-    q: "Synonym of HAPPY is:",
-    o: ["Sad", "Angry", "Joyful", "Tired"]
-  }
-];
+  const questions = [
+    {
+      q: "Choose the correct sentence:",
+      o: [
+        "He go to school daily",
+        "He goes to school daily",
+        "He gone to school daily",
+        "He going to school daily"
+      ]
+    },
+    {
+      q: "Synonym of HAPPY is:",
+      o: ["Sad", "Angry", "Joyful", "Tired"]
+    }
+  ];
 
-let current = 0;
+  let current = 0;
 
-function startTest() {
-  document.getElementById("intro").style.display = "none";
-  document.getElementById("quiz").style.display = "block";
-  loadQuestion();
-}
-
-function loadQuestion() {
-  const q = questions[current];
-  document.getElementById("question").innerText = q.q;
-
-  const box = document.getElementById("options");
-  box.innerHTML = "";
-
-  q.o.forEach(opt => {
-    const div = document.createElement("div");
-    div.innerText = opt;
-    box.appendChild(div);
-  });
-}
-
-function nextQ() {
-  if (current < questions.length - 1) {
-    current++;
+  function startTest() {
+    document.getElementById("intro").style.display = "none";
+    document.getElementById("quiz").style.display = "block";
     loadQuestion();
-  } else {
-    alert("End of mock 👍");
   }
-}
+
+  function loadQuestion() {
+    const q = questions[current];
+    document.getElementById("question").innerText = q.q;
+
+    const optBox = document.getElementById("options");
+    optBox.innerHTML = "";
+
+    q.o.forEach(function(opt) {
+      const div = document.createElement("div");
+      div.innerText = opt;
+      optBox.appendChild(div);
+    });
+  }
+
+  function nextQ() {
+    if (current < questions.length - 1) {
+      current++;
+      loadQuestion();
+    } else {
+      alert("Mock finished 👍");
+    }
+  }
 </script>
-    
+
 </body>
 </html>
 
-    
+
   
