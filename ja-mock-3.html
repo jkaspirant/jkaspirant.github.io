@@ -1,21 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Mock Test – Step 1</title>
+  <title>JA Mock Test 3</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .hidden {
+      display: none;
+    }
+    .option {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 8px 0;
+      cursor: pointer;
+    }
+    .option.selected {
+      background: #d1fae5;
+      border-color: green;
+    }
+  </style>
 </head>
 
 <body>
 
-<h1 id="title">JKSSB MOCK TEST</h1>
+  <!-- START PAGE -->
+  <h1 id="title">JKSSB MOCK TEST 3</h1>
+  <button onclick="startTest()">Start</button>
 
-<button onclick="startTest()">Start</button>
+  <!-- QUESTION PAGE -->
+  <div id="quiz" class="hidden">
+    <h2 id="question">Question text</h2>
 
-<script>
-function startTest() {
-  document.getElementById("title").innerText = "START BUTTON WORKING ✅";
-}
-</script>
+    <div class="option" onclick="selectOption(this)">Option A</div>
+    <div class="option" onclick="selectOption(this)">Option B</div>
+    <div class="option" onclick="selectOption(this)">Option C</div>
+    <div class="option" onclick="selectOption(this)">Option D</div>
+  </div>
+
+  <script>
+    function startTest() {
+      document.getElementById("title").classList.add("hidden");
+      document.querySelector("button").classList.add("hidden");
+
+      document.getElementById("quiz").classList.remove("hidden");
+
+      document.getElementById("question").innerText =
+        "Choose the correct synonym of 'EPHEMERAL'";
+    }
+
+    function selectOption(el) {
+      const options = document.querySelectorAll(".option");
+      options.forEach(o => o.classList.remove("selected"));
+      el.classList.add("selected");
+    }
+  </script>
 
 </body>
 </html>
+
+
+
+
+
