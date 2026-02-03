@@ -4,7 +4,18 @@
   <meta charset="UTF-8">
   <title>JKSSB Mock 3</title>
 </head>
-
+<style>
+  .option {
+    padding: 8px;
+    margin: 5px 0;
+    border: 1px solid #999;
+    cursor: pointer;
+  }
+  .selected {
+    background: #c7f7c7;
+    border-color: green;
+  }
+</style>
 <body>
 
 <h1>JKSSB MOCK TEST 3</h1>
@@ -19,7 +30,7 @@
   <br>
   <button onclick="nextQ()">Next</button>
 </div>
-
+let answers = [];
 <script>
   const questions = [
     {
@@ -44,21 +55,31 @@
     document.getElementById("quiz").style.display = "block";
     loadQuestion();
   }
+function loadQuestion() {
+  const q = questions[current];
+  document.getElementById("question").innerText = q.q;
 
-  function loadQuestion() {
-    const q = questions[current];
-    document.getElementById("question").innerText = q.q;
+  const optBox = document.getElementById("options");
+  optBox.innerHTML = "";
 
-    const optBox = document.getElementById("options");
-    optBox.innerHTML = "";
+  q.o.forEach(function(opt, index) {
+    const div = document.createElement("div");
+    div.className = "option";
 
-    q.o.forEach(function(opt) {
-      const div = document.createElement("div");
-      div.innerText = opt;
-      optBox.appendChild(div);
-    });
-  }
+    if (answers[current] === index) {
+      div.classList.add("selected");
+    }
 
+    div.innerText = opt;
+
+    div.onclick = function () {
+      answers[current] = index;
+      loadQuestion();
+    };
+
+    optBox.appendChild(div);
+  });
+      }
   function nextQ() {
     if (current < questions.length - 1) {
       current++;
