@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Sectional Test – JKSSB JA</title>
+
+<style>
+  body{
+    font-family: Arial, sans-serif;
+    background:#f5f5f5;
+    margin:0;
+  }
+  .container{
+    max-width:900px;
+    margin:auto;
+    background:#fff;
+    padding:20px;
+    min-height:100vh;
+  }
+  h1,h2{color:#0f172a}
+  .btn{
+    padding:10px 18px;
+    border:none;
+    background:#2563eb;
+    color:#fff;
+    border-radius:6px;
+    cursor:pointer;
+  }
+  .option{
+    padding:12px;
+    border:1px solid #cbd5f5;
+    border-radius:6px;
+    margin-bottom:10px;
+    cursor:pointer;
+  }
+  .option.selected{
+    background:#e0e7ff;
+    border-color:#2563eb;
+  }
+  .hidden{display:none}
+  .timer{
+    float:right;
+    font-weight:bold;
+  }
+</style>
+</head>
+
+<body>
+
+<!-- ========== INSTRUCTIONS PAGE ========== -->
+<div class="container" id="intro">
+  <h1>English Sectional Test – JKSSB JA</h1>
+
+  <ul>
+    <li>Total Questions: 20</li>
+    <li>Total Time: 20 Minutes</li>
+    <li>Each question carries 1 mark</li>
+    <li>Negative marking: 0.25</li>
+  </ul>
+
+  <button class="btn" onclick="startTest()">Start Test</button>
+</div>
+
+<!-- ========== QUIZ PAGE ========== -->
+<div class="container hidden" id="quiz">
+  <div class="timer" id="timer">20:00</div>
+
+  <h2>English</h2>
+  <p><b>Question <span id="qNo">1</span> / <span id="totalQ">20</span></b></p>
+
+  <p id="question">Question text</p>
+  <div id="options"></div>
+
+  <br>
+  <button class="btn" onclick="prevQ()">Previous</button>
+  <button class="btn" onclick="nextQ()">Next</button>
+</div>
+
+<!-- ========== RESULT PAGE ========== -->
+<div class="container hidden" id="result">
+  <h1>Result</h1>
+  <h2 id="score"></h2>
+  <button class="btn" onclick="location.reload()">Restart</button>
+</div>
+
+<script>
+/* ===== CONFIG ===== */
+const TOTAL_QUESTIONS = 20;
+const TOTAL_TIME = 20 * 60;
+const MARK_CORRECT = 1;
+const MARK_WRONG = -0.25;
+
+/* ===== STATE ===== */
+let current = 0;
+let answers = new Array(TOTAL_QUESTIONS).fill(null);
+let timeLeft = TOTAL_TIME;
+let timerInt;
+
+/* ===== QUESTIONS ===== */
+/* 👉 YAHAN SIRF ENGLISH QUESTIONS PASTE KARNE HAIN */
+const questions = [
+
+/* ---------- PARAGRAPH 1 ---------- */
+{
+  s: "English",
+  q: "Read the passage:\n\nDiscipline plays an important role in shaping a person’s character. It teaches self-control, responsibility, and respect for rules. A disciplined individual is more likely to succeed because such a person can manage time and resources effectively.\n\nWhat is the main idea of the passage?",
+  o: [
+    "Discipline is related only to punishment",
+    "Discipline helps in character building",
+    "Discipline is unnecessary in modern life",
+    "Discipline creates fear"
+  ],
+  a: 1
+},
+{
+  s: "English",
+  q: "According to the passage, a disciplined person succeeds mainly because he:",
+  o: [
+    "Follows others blindly",
+    "Avoids responsibilities",
+    "Manages time and resources well",
+    "Depends on luck"
+  ],
+  a: 2
+},
+
+/* ---------- PARAGRAPH 2 ---------- */
+{
+  s: "English",
+  q: "Read the passage:\n\nReading regularly improves vocabulary and comprehension skills. It also enhances imagination and helps a person understand different perspectives. People who read often are generally better communicators.\n\nWhat does regular reading mainly improve?",
+  o: [
+    "Physical strength",
+    "Memory alone",
+    "Vocabulary and comprehension",
+    "Writing speed"
+  ],
+  a: 2
+},
+{
+  s: "English",
+  q: "From the passage, good readers are usually better at:",
+  o: [
+    "Arguing",
+    "Communicating",
+    "Memorising facts",
+    "Drawing pictures"
+  ],
+  a: 1
+},
+
+/* ---------- GRAMMAR & USAGE ---------- */
+{
+  s: "English",
+  q: "Choose the correct sentence:",
+  o: [
+    "He is senior than me.",
+    "He is senior to me.",
+    "He is senior from me.",
+    "He is senior over me."
+  ],
+  a: 1
+},
+{
+  s: "English",
+  q: "Choose the correct preposition:\nShe is good ___ mathematics but weak ___ English.",
+  o: [
+    "in, in",
+    "at, at",
+    "in, at",
+    "at, in"
+  ],
+  a: 0
+},
+{
+  s: "English",
+  q: "Select the correct sentence:",
+  o: [
+    "She did not knew the answer.",
+    "She did not know the answer.",
+    "She does not knew the answer.",
+    "She did not known the answer."
+  ],
+  a: 1
+},
+{
+  s: "English",
+  q: "Choose the correct form:\nHe prefers tea ___ coffee.",
+  o: [
+    "than",
+    "to",
+    "over",
+    "from"
+  ],
+  a: 1
+},
+
+/* ---------- VOCABULARY ---------- */
+{
+  s: "English",
+  q: "Choose the synonym of 'CANDID':",
+  o: [
+    "Secretive",
+    "Honest",
+    "Careless",
+    "Confused"
+  ],
+  a: 1
+},
+{
+  s: "English",
+  q: "Choose the antonym of 'SCARCE':",
+  o: [
+    "Rare",
+    "Limited",
+    "Plentiful",
+    "Small"
+  ],
+  a: 2
+},
+{
+  s: "English",
+  q: "Choose the correct meaning of the idiom:\n'To hit the nail on the head'",
+  o: [
+    "To do physical work",
+    "To make a mistake",
+    "To say something exactly right",
+    "To hit someone"
+  ],
+  a: 2
+},
+{
+  s: "English",
+  q: "Meaning of the phrase 'In the long run':",
+  o: [
+    "Immediately",
+    "After a long time",
+    "At the beginning",
+    "Without delay"
+  ],
+  a: 1
+},
+
+/* ---------- SENTENCE IMPROVEMENT ---------- */
+{
+  s: "English",
+  q: "Improve the sentence:\nHe is one of the best player in the team.",
+  o: [
+    "best players",
+    "better players",
+    "best player",
+    "No improvement"
+  ],
+  a: 0
+},
+{
+  s: "English",
+  q: "Improve the sentence:\nEach of the boys have brought their books.",
+  o: [
+    "has brought his book",
+    "have brought his book",
+    "has brought their books",
+    "No improvement"
+  ],
+  a: 0
+},
+
+/* ---------- ERROR SPOTTING ---------- */
+{
+  s: "English",
+  q: "Identify the error:\nHe (A) / as well as his friends (B) / were present (C) / in the meeting (D).",
+  o: ["A", "B", "C", "D"],
+  a: 2
+},
+{
+  s: "English",
+  q: "Find the incorrect part:\nNeither (A) / the teacher nor the students (B) / was ready (C) / for the test (D).",
+  o: ["A", "B", "C", "D"],
+  a: 2
+},
+
+/* ---------- FILL IN THE BLANKS ---------- */
+{
+  s: "English",
+  q: "Fill in the blank:\nHe worked hard ___ he could achieve success.",
+  o: [
+    "because",
+    "so that",
+    "although",
+    "unless"
+  ],
+  a: 1
+},
+{
+  s: "English",
+  q: "Fill in the blank:\nShe was tired ___ she continued working.",
+  o: [
+    "but",
+    "because",
+    "so",
+    "if"
+  ],
+  a: 0
+},
+
+/* ---------- MISC ---------- */
+{
+  s: "English",
+  q: "Choose the correct word:\nThe manager praised him for his ___ behaviour.",
+  o: [
+    "responsible",
+    "responsibility",
+    "respond",
+    "response"
+  ],
+  a: 0
+},
+{
+  s: "English",
+  q: "Choose the correctly spelt word:",
+  o: [
+    "Occassion",
+    "Occasion",
+    "Ocassion",
+    "Occesion"
+  ],
+  a: 1
+}
+
+];
+  }
+  // 👉 total 20 English questions
+];
+
+/* ===== LOGIC ===== */
+document.getElementById("totalQ").innerText = questions.length;
+
+function startTest(){
+  document.getElementById("intro").classList.add("hidden");
+  document.getElementById("quiz").classList.remove("hidden");
+  startTimer();
+  loadQ();
+}
+
+function loadQ(){
+  let q = questions[current];
+  document.getElementById("qNo").innerText = current + 1;
+  document.getElementById("question").innerText = q.q;
+
+  let optBox = document.getElementById("options");
+  optBox.innerHTML = "";
+
+  q.o.forEach((opt,i)=>{
+    let div = document.createElement("div");
+    div.className = "option " + (answers[current]===i?"selected":"");
+    div.innerText = opt;
+    div.onclick = ()=>{answers[current]=i; loadQ();}
+    optBox.appendChild(div);
+  });
+}
+
+function nextQ(){
+  if(current < questions.length-1){
+    current++;
+    loadQ();
+  } else {
+    finish();
+  }
+}
+
+function prevQ(){
+  if(current > 0){
+    current--;
+    loadQ();
+  }
+}
+
+function finish(){
+  clearInterval(timerInt);
+  document.getElementById("quiz").classList.add("hidden");
+  document.getElementById("result").classList.remove("hidden");
+
+  let score = 0;
+  questions.forEach((q,i)=>{
+    if(answers[i] === q.a) score += MARK_CORRECT;
+    else if(answers[i] !== null) score += MARK_WRONG;
+  });
+
+  document.getElementById("score").innerText =
+    `Score: ${score} / ${questions.length}`;
+}
+
+function startTimer(){
+  timerInt = setInterval(()=>{
+    timeLeft--;
+    let m = Math.floor(timeLeft/60);
+    let s = timeLeft%60;
+    document.getElementById("timer").innerText =
+      `${m}:${s<10?'0'+s:s}`;
+    if(timeLeft <= 0){
+      clearInterval(timerInt);
+      finish();
+    }
+  },1000);
+}
+</script>
+
+</body>
+</html>
