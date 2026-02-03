@@ -96,24 +96,23 @@ let userAnswers = new Array(TOTAL_QUESTIONS).fill(null);
 let timeLeft = TOTAL_TIME;
 /* ================== */
 const questions = [
-// ===== ENGLISH (QUESTIONS 1–20) =====
-  {
+// ===== ENGLISH (QUESTIONS 1–20) 
+  
     s: "English",
     q: "Choose the correct sentence using 'lest':",
     o: [
       "Work hard lest you will fail.",
       "Work hard lest you should fail.",
       "Work hard lest you might fail.",
-      "Work hard lest you fail."
-    ],
+      "Work hard lest you fail."],
     a: 1
-  },
+  }
   {
     s: "English",
     q: "Choose the synonym of 'EPHEMERAL':",
     o: ["Eternal", "Transient", "Spiteful", "Resilient"],
     a: 1
-  },
+  }
   {
     s: "English",
     q: "Change into Passive Voice: 'It is time to take tea.'",
@@ -121,10 +120,10 @@ const questions = [
       "It is time tea to be taken.",
       "It is time for tea to be taken.",
       "Tea is time to be taken.",
-      "It was time for tea to be taken."
-    ],
+      "It was time for tea to be taken."],
+    
     a: 1
-  },
+  }
   {
     s: "English",
     q: "Select the correctly punctuated sentence:",
@@ -132,22 +131,22 @@ const questions = [
       "The teacher said, 'Be quiet.'",
       "The teacher said 'Be quiet'.",
       "The teacher said, Be quiet.",
-      "The teacher, said 'Be quiet'!"
-    ],
+      "The teacher, said 'Be quiet'!"],
+    
     a: 0
-  },
+  }
   {
     s: "English",
     q: "Choose the antonym of 'OBSEQUIOUS':",
     o: ["Subservient", "Domineering", "Flattering", "Passive"],
     a: 1
-  },
+  }
   {
     s: "English",
     q: "Fill in the blank: 'Scarcely had he reached the station ___ the train started.'",
     o: ["than", "then", "when", "that"],
     a: 2
-  },
+  }
   {
     s: "English",
     q: "Meaning of the idiom 'To pay through the nose':",
@@ -155,16 +154,16 @@ const questions = [
       "To pay an extremely high price",
       "To get a cheap deal",
       "To pay under pressure",
-      "To avoid payment"
-    ],
+      "To avoid payment"],
+    
     a: 0
-  },
+  }
   {
     s: "English",
     q: "Identify the clause: 'I know where he lives.'",
     o: ["Adjective Clause", "Adverb Clause", "Noun Clause", "Principal Clause"],
     a: 2
-  },
+  }
   {
     s: "English",
     q: "Which of the following is a Gerund?",
@@ -172,10 +171,10 @@ const questions = [
       "He is running.",
       "Running is good for health.",
       "I want to run.",
-      "She ran fast."
-    ],
+      "She ran fast."],
+    
     a: 1
-  },
+  }
   {
     s: "English",
     q: "Narration: She said to me, 'Wait here until I come back.'",
@@ -183,10 +182,10 @@ const questions = [
       "She asked me wait there until she came back.",
       "She told me to wait there until she came back.",
       "She says me to wait there until she comes back.",
-      "She told me wait here until she come back."
-    ],
+      "She told me wait here until she come back."],
+    
     a: 1
-  },
+  }
   {
     s: "English",
     q: "Change Voice: 'They are building a wall.'",
@@ -194,10 +193,10 @@ const questions = [
       "A wall is being built by them.",
       "A wall was being built by them.",
       "A wall has been built by them.",
-      "A wall is built by them."
-    ],
+      "A wall is built by them."],
+    
     a: 0
-  },
+  }
   {
     s: "English",
     q: "Sentence Improvement: 'He is as tall as me.'",
@@ -205,46 +204,45 @@ const questions = [
       "as tall as I",
       "taller as I",
       "as tall as I am",
-      "No improvement"
-    ],
+      "No improvement"],
     a: 2
-  },
+  }
   {
     s: "English",
     q: "Choose the correct word: 'This medicine will ___ your pain.'",
     o: ["affect", "effect", "expect", "accept"],
     a: 1
-  },
+  }
   {
     s: "English",
     q: "Fill in the blank: 'The cat jumped ___ the wall.'",
     o: ["over", "above", "onto", "upon"],
     a: 0
-  },
+  }
   {
     s: "English",
     q: "Choose the correct phrase: 'You had better ___ some money for your future.'",
     o: ["to save", "saving", "save", "saved"],
     a: 2
-  },
+  }
   {
     s: "English",
     q: "According to the passage, by what year was the trans fat content capped to 3%?",
     o: ["2016", "2020", "2021", "2022"],
     a: 2
-  },
+  }
   {
     s: "English",
     q: "Which year is the WHO target year for achieving the 2% trans fat limit?",
     o: ["2021", "2022", "2023", "2024"],
     a: 2
-  },
+  }
   {
     s: "English",
     q: "Identify the part with error: 'Scarcely had the party (A) / begun (B) / than the uninvited (C) / guests arrived (D).'",
     o: ["A", "B", "C", "D"],
     a: 2
-  },
+  }
   {
     s: "English",
     q: "Rearrange to form a correct sentence:\n(A) the more we delve into the quantum realm\n(B) that defies our classical understanding of reality\n(C) only to encounter a level of unpredictability\n(D) the more we seem to peel back the layers of cosmic certainty",
@@ -252,10 +250,9 @@ const questions = [
       "A - D - C - B",
       "D - A - C - B",
       "A - C - B - D",
-      "D - C - B - A"
-    ],
+      "D - C - B - A"],
     a: 1
-  },
+  }
   {
     s: "English",
     q: "Choose the correct articles: 'The philosophy of ___ Schopenhauer suggests that ___ life is often ___ arduous struggle against the Will.'",
@@ -263,8 +260,7 @@ const questions = [
       "The / (no article) / (no article)",
       "(no article) / the / the / an",
       "The / the / a / the",
-      "A / (no article) / (no article) / the"
-    ],
+      "A / (no article) / (no article) / the"],
     a: 0
   }
   // ===== JK GK (QUESTIONS 21–40) =====
@@ -677,7 +673,10 @@ const questions = [
 ];
 
 // ================= LOGIC =================
-
+window.onload = () => {
+  const tq = document.getElementById("totalQ");
+  if (tq) tq.innerText = questions.length;
+};
 function startTest() {
   document.getElementById("intro").classList.add("hidden");
   document.getElementById("quiz").classList.remove("hidden");
@@ -752,6 +751,5 @@ function startTimer() {
   }, 1000);
 }
 </script>
-alert("JS loaded");
 </body>
 </html>
